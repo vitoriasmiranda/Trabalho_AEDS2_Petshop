@@ -1,5 +1,7 @@
 #include "petshop.h"
 #include <math.h>
+#ifndef PETSHOP_C
+#define PETSHOP_C
 
 TPet *criar_pet(int cod, char *nome, char *especie, int cod_cliente) {
     TPet *pet = (TPet *) malloc(sizeof(TPet));
@@ -134,3 +136,5 @@ void embaralha(int *vet, int tam) {
         vet[j] = tmp;
     }
 }
+
+#endif

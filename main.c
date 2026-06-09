@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "petshop.c"
+#include "petshop.c" 
+#include "petshop.h" 
+#include "ordenacao.c"
 
 void gerar_base_teste(int tamanho, const char *nome_arquivo, int ordenado) {
     FILE *arq = fopen(nome_arquivo, "w+b");
@@ -151,6 +153,81 @@ int main() {
     fclose(log_file);
     printf("\n====================================================\n");
     printf(" TESTES CONCLUIDOS! Arquivo 'log.txt' gerado.\n");
+    printf("====================================================\n");
+
+int tamanhos_p2[] = {1000, 10000, 100000, 500000};
+    int num_tamanhos_qs = 2; 
+    int num_tamanhos_ext = 4;
+    
+    FILE *log_file_p2 = fopen("log_ordenacao.txt", "w");
+    if (!log_file_p2) {
+        printf("Erro ao criar arquivo de log da Parte 2!\n");
+        return 1;
+    }
+    fprintf(log_file_p2, "============= RELATORIO DE ORDENACAO =============\n\n");
+
+    printf("--- PARTE 2: QUICKSORT NO DISCO ---\n");
+    printf("(Limitado a 10.000 registros para evitar travamento)\n");
+    
+    for (int i = 0; i < num_tamanhos_qs; i++) { 
+        int tam = tamanhos_p2[i];
+        printf("    -> Ordenando %d registros...\n", tam);
+        
+        gerar_base_teste(tam, "pets_desord_qs.dat", 0);
+        FILE *arq = fopen("pets_desord_qs.dat", "r+b");
+        
+        if (arq) {
+            inicio_tempo = clock();
+            quicksort_disco(arq, tam);
+            fim_tempo = clock();
+            
+            tempo_gasto = ((double)(fim_tempo - inicio_tempo)) / CLOCKS_PER_SEC;
+            fprintf(log_file_p2, "[QuickSort Externo] Tamanho: %6d | Tempo: %.4f s\n", tam, tempo_gasto);
+            printf("       Tempo: %.4f segundos\n", tempo_gasto);
+            fclose(arq);
+            remove("pets_desord_qs.dat"); 
+        }
+    }
+    printf("\n");
+
+    printf("--- PARTE 2: CLASSIFICACAO EXTERNA ---\n");
+    int M = 1000; 
+
+    for (int i = 0; i < num_tamanhos_ext; i++) {
+        int tam = tamanhos_p2[i];
+        printf("    -> Ordenando %d registros (Substituicao + Arvore)...\n", tam);
+        
+        gerar_base_teste(tam, "pets_desord_ext.dat", 0);
+        FILE *arq_in = fopen("pets_desord_ext.dat", "rb");
+        
+        if (arq_in) {
+            inicio_tempo = clock();
+            
+            int particoes = selecao_com_substituicao(arq_in, M);
+            fclose(arq_in);
+
+            FILE *arq_out = fopen("pets_ord_ext.dat", "w+b");
+            if (arq_out) {
+                intercalacao_arvore_vencedores(arq_out, particoes);
+                fclose(arq_out);
+            }
+
+            fim_tempo = clock();
+            
+            tempo_gasto = ((double)(fim_tempo - inicio_tempo)) / CLOCKS_PER_SEC;
+            fprintf(log_file_p2, "[Classif. Externa]  Tamanho: %6d | Particoes: %2d | Tempo: %.4f s\n", tam, particoes, tempo_gasto);
+            printf("       Particoes: %d | Tempo total: %.4f segundos\n", particoes, tempo_gasto);
+            
+            remove("pets_desord_ext.dat"); 
+            remove("pets_ord_ext.dat");    
+        }
+    }
+
+    fclose(log_file_p2);
+
+    printf("\n====================================================\n");
+    printf(" TRABALHO CONCLUIDO COM SUCESSO!\n");
+    printf(" Logs gerados: 'log.txt' e 'log_ordenacao.txt'\n");
     printf("====================================================\n");
 
     return 0;

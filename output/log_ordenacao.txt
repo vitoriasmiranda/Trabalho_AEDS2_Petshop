@@ -1,0 +1,8 @@
+============= RELATORIO DE ORDENACAO =============
+
+[QuickSort Externo] Tamanho:   1000 | Tempo: 0.0390 s
+[QuickSort Externo] Tamanho:  10000 | Tempo: 0.5080 s
+[Classif. Externa]  Tamanho:   1000 | Particoes:  1 | Tempo: 0.0270 s
+[Classif. Externa]  Tamanho:  10000 | Particoes:  6 | Tempo: 0.0630 s
+[Classif. Externa]  Tamanho: 100000 | Particoes: 17 | Tempo: 0.2800 s
+[Classif. Externa]  Tamanho: 500000 | Particoes: 18 | Tempo: 1.3500 s
