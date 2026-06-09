@@ -1,0 +1,22 @@
+================ RELATORIO DE BUSCAS =================
+
+--- BASE DE TAMANHO: 100 REGISTROS ---
+BUSCA SEQUENCIAL (Base Desordenada):
+Chave buscada: 105 | Comparacoes: 100 | Tempo: 0.0000 ms
+
+BUSCA BINARIA (Base Ordenada):
+Chave buscada: 105 | Comparacoes: 7 | Tempo: 0.0000 ms
+
+--- BASE DE TAMANHO: 1000 REGISTROS ---
+BUSCA SEQUENCIAL (Base Desordenada):
+Chave buscada: 1005 | Comparacoes: 1000 | Tempo: 1.0000 ms
+
+BUSCA BINARIA (Base Ordenada):
+Chave buscada: 1005 | Comparacoes: 10 | Tempo: 0.0000 ms
+
+--- BASE DE TAMANHO: 10000 REGISTROS ---
+BUSCA SEQUENCIAL (Base Desordenada):
+Chave buscada: 10005 | Comparacoes: 10000 | Tempo: 4.0000 ms
+
+BUSCA BINARIA (Base Ordenada):
+Chave buscada: 10005 | Comparacoes: 14 | Tempo: 0.0000 ms
