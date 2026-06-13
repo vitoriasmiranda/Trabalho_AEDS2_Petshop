@@ -156,7 +156,7 @@ int main() {
     printf("====================================================\n");
 
 int tamanhos_p2[] = {1000, 10000, 100000, 500000};
-    int num_tamanhos_qs = 2; 
+    int num_tamanhos_qs = 3; 
     int num_tamanhos_ext = 4;
     
     FILE *log_file_p2 = fopen("log_ordenacao.txt", "w");
@@ -167,7 +167,7 @@ int tamanhos_p2[] = {1000, 10000, 100000, 500000};
     fprintf(log_file_p2, "============= RELATORIO DE ORDENACAO =============\n\n");
 
     printf("--- PARTE 2: QUICKSORT NO DISCO ---\n");
-    printf("(Limitado a 10.000 registros para evitar travamento)\n");
+    printf("(Limitado a 100.000 registros para evitar travamento)\n");
     
     for (int i = 0; i < num_tamanhos_qs; i++) { 
         int tam = tamanhos_p2[i];
@@ -217,9 +217,6 @@ int tamanhos_p2[] = {1000, 10000, 100000, 500000};
             tempo_gasto = ((double)(fim_tempo - inicio_tempo)) / CLOCKS_PER_SEC;
             fprintf(log_file_p2, "[Classif. Externa]  Tamanho: %6d | Particoes: %2d | Tempo: %.4f s\n", tam, particoes, tempo_gasto);
             printf("       Particoes: %d | Tempo total: %.4f segundos\n", particoes, tempo_gasto);
-            
-            remove("pets_desord_ext.dat"); 
-            remove("pets_ord_ext.dat");    
         }
     }
 
