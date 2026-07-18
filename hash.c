@@ -70,12 +70,12 @@ int insere_hash(TPet *pet, const char *arq_hash, const char *arq_dados, int m) {
         fseek(fd, 0, SEEK_SET);
         fwrite(&topo_livre, sizeof(int), 1, fd);
 
-        printf("    [LOG DISCO] Pet inserido na posicao reaproveitada: %d\n\n", pos_nova);
+        printf("    [LOG DISCO] Pet [%d] %s inserido na posicao reaproveitada: %d\n", pet->cod, pet->nome, pos_nova);
         
     } else {
         fseek(fd, 0, SEEK_END);
         pos_nova = (ftell(fd) - sizeof(int)) / sizeof(TPetHash);
-        printf("    [LOG DISCO] Pet inserido em nova posicao no disco: %d\n\n", pos_nova);
+        printf("    [LOG DISCO] Pet [%d] %s inserido em nova posicao no disco: %d\n", pet->cod, pet->nome, pos_nova);
     }
 
     no.pet = *pet;
@@ -171,7 +171,7 @@ int remove_hash(int cod, const char *arq_hash, const char *arq_dados, int m) {
             fseek(fd, 0, SEEK_SET);
             fwrite(&topo_livre, sizeof(int), 1, fd);
 
-            printf("    [LOG DISCO] Pet removido. Posicao %d liberada para reuso.\n\n", pos_atual);
+            printf("    [LOG DISCO] Pet [%d] %s removido. Posicao %d liberada para reuso.\n", no.pet.cod, no.pet.nome, pos_atual);
 
             fclose(fh); fclose(fd);
             return 1; 
