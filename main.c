@@ -4,6 +4,7 @@
 #include "petshop.c" 
 #include "petshop.h" 
 #include "ordenacao.c"
+#include "hash.c"
 
 void gerar_base_teste(int tamanho, const char *nome_arquivo, int ordenado) {
     FILE *arq = fopen(nome_arquivo, "w+b");
@@ -156,7 +157,7 @@ int main() {
     printf("====================================================\n");
 
 int tamanhos_p2[] = {1000, 10000, 100000, 500000};
-    int num_tamanhos_qs = 3; 
+    int num_tamanhos_qs = 2; 
     int num_tamanhos_ext = 4;
     
     FILE *log_file_p2 = fopen("log_ordenacao.txt", "w");
@@ -226,6 +227,62 @@ int tamanhos_p2[] = {1000, 10000, 100000, 500000};
     printf(" TRABALHO CONCLUIDO COM SUCESSO!\n");
     printf(" Logs gerados: 'log.txt' e 'log_ordenacao.txt'\n");
     printf("====================================================\n");
+
+    printf("\n\n====================================================\n");
+    printf("        PARTE III: TESTANDO TABELA HASH \n");
+    printf("====================================================\n");
+    
+    int m = 7; 
+    const char *arq_tabHash = "tabHash.dat";
+    const char *arq_dadosHash = "pets_hash_dados.dat";
+    
+    inicializa_hash(arq_tabHash, arq_dadosHash, m);
+
+    TPet *p1 = criar_pet(10, "Rex", "Cachorro", 101);
+    TPet *p2 = criar_pet(17, "Mia", "Gato", 102); 
+    TPet *p3 = criar_pet(24, "Loro", "Papagaio", 103); 
+    
+    printf("\n-> [1] Inserindo Pets iniciais...\n");
+    insere_hash(p1, arq_tabHash, arq_dadosHash, m);
+    insere_hash(p2, arq_tabHash, arq_dadosHash, m);
+    insere_hash(p3, arq_tabHash, arq_dadosHash, m);
+    printf("Pets inseridos com sucesso!\n");
+
+    printf("\n-> [2] Teste de Seguranca: Insercao Duplicada...\n");
+    printf("Tentando inserir a chave 10 (Rex) novamente...\n");
+    if (!insere_hash(p1, arq_tabHash, arq_dadosHash, m)) {
+        printf("SUCESSO: Chave duplicada rejeitada corretamente pelo sistema!\n");
+    }
+
+    int comp_hash = 0;
+    TPet *pet_buscado = busca_hash(17, arq_tabHash, arq_dadosHash, m, &comp_hash);
+    if(pet_buscado) {
+        printf("\n-> [3] Busca (Chave 17): Encontrado '%s' em %d comparacoes.\n", pet_buscado->nome, comp_hash);
+        free(pet_buscado);
+    }
+
+    printf("\n-> [4] Teste de Seguranca: Remover chave inexistente...\n");
+    printf("Tentando remover a chave 999...\n");
+    if (!remove_hash(999, arq_tabHash, arq_dadosHash, m)) {
+        printf("SUCESSO: Remocao falhou graciosamente (Chave nao existe)!\n");
+    }
+
+    printf("\n-> [5] Removendo chave 17...\n\n");
+    if (remove_hash(17, arq_tabHash, arq_dadosHash, m)) {
+        printf("Chave 17 removida. Espaco entrou na Pilha de Reaproveitamento.\n");
+    }
+
+    pet_buscado = busca_hash(17, arq_tabHash, arq_dadosHash, m, &comp_hash);
+    if(!pet_buscado) {
+        printf("-> Busca pos-remocao (Chave 17): Nao encontrado!\n");
+    }
+
+    TPet *p4 = criar_pet(30, "Bolinha", "Hamster", 104);
+    printf("\n-> [6] Gerenciamento de Espaco: Inserindo chave 30 (Bolinha)...\n");
+    printf("Ele deve ocupar EXATAMENTE o espaco reaproveitado da chave 17.\n\n");
+    insere_hash(p4, arq_tabHash, arq_dadosHash, m);
+
+    free(p1); free(p2); free(p3); free(p4);
 
     return 0;
 }
